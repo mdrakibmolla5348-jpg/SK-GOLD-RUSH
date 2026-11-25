@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071225">
+<title>SK GOLD RUSH</title>
+<style>
+:root{--gold:#ffd45a;--gold2:#ffad22;--bg:#071225;--panel:#101f38;--muted:#9aabc5;--line:#263957}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% 0,#18365a 0,#071225 48%,#040a15 100%);color:#fff;font-family:Arial,sans-serif;min-height:100vh}
+.app{max-width:480px;margin:auto;padding:18px 15px 95px}.top{display:flex;justify-content:space-between;align-items:center}.brand{font-weight:900;letter-spacing:1.5px;color:var(--gold);font-size:20px}.tag{font-size:11px;color:#b7c6dc;border:1px solid var(--line);padding:7px 10px;border-radius:20px}
+.balance{margin-top:22px;padding:18px;border:1px solid #8c6928;border-radius:20px;background:linear-gradient(135deg,#1d3553,#111c31);text-align:center;box-shadow:0 12px 35px #0005}.small{color:var(--muted);font-size:12px;letter-spacing:1px}.amount{font-size:36px;font-weight:900;color:var(--gold);margin:7px 0}.unit{font-size:12px;color:#e7c879}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.stat{background:#101f38;border:1px solid var(--line);border-radius:13px;padding:12px;text-align:center}.stat b{display:block;margin-top:5px;color:var(--gold)}
+.taparea{text-align:center;margin:23px 0 18px}.tapcoin{width:210px;height:210px;border-radius:50%;border:8px solid #f5c34e;background:radial-gradient(circle at 35% 28%,#fff0a4,#f9c33d 35%,#c57b12 70%,#75410b);box-shadow:0 0 0 8px #f5c34e22,0 18px 35px #0009,inset 0 4px 8px #fff9;display:inline-flex;align-items:center;justify-content:center;color:#573000;font-size:52px;font-weight:1000;text-shadow:0 2px #fff8;cursor:pointer;user-select:none;transition:transform .08s}.tapcoin:active{transform:scale(.95)}.taplabel{color:var(--muted);font-size:12px;margin-top:12px}
+.energyrow{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:12px 2px 7px}.bar{height:9px;background:#263957;border-radius:20px;overflow:hidden}.fill{height:100%;width:100%;background:linear-gradient(90deg,#ffb52e,#ffe47a);border-radius:20px}
+.section{margin-top:22px}.sectitle{font-weight:800;margin-bottom:10px}.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:linear-gradient(145deg,#142744,#0d192d);border:1px solid var(--line);border-radius:15px;padding:14px}.card .emoji{font-size:24px}.card h3{font-size:14px;margin:8px 0 5px}.card p{font-size:11px;color:var(--muted);min-height:27px;margin:0 0 10px;line-height:1.4}.btn{width:100%;border:0;border-radius:10px;padding:10px;background:linear-gradient(90deg,#ffb52e,#ffe17b);color:#372000;font-weight:900;cursor:pointer}.btn:disabled{opacity:.45}
+.notice{margin-top:18px;padding:12px;border:1px solid #745a29;background:#302615;border-radius:12px;color:#f5d98b;font-size:11px;line-height:1.5}
+.nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);background:#0b172a;border-top:1px solid var(--line);padding:10px 5px calc(10px + env(safe-area-inset-bottom));z-index:4}.nav button{background:none;border:0;color:#91a4c1;font-size:11px;padding:6px;cursor:pointer}.nav button span{display:block;font-size:20px;margin-bottom:4px}.nav button.active{color:var(--gold)}
+.modalback{display:none;position:fixed;inset:0;background:#000b;z-index:8;align-items:center;justify-content:center;padding:20px}.modal{max-width:390px;width:100%;background:#12233d;border:1px solid #9c762d;border-radius:18px;padding:20px}.modal h2{color:var(--gold);margin-top:0}.modal p{color:#c2cee0;font-size:13px;line-height:1.5}.close{float:right;background:none;border:0;color:#fff;font-size:23px}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:#fff;color:#111;padding:10px 15px;border-radius:20px;font-size:12px;display:none;z-index:10}
+</style>
+</head>
+<body>
+<div class="app">
+ <div class="top"><div class="brand">✦ SK GOLD RUSH</div><div class="tag">SEASON 01 · DEMO</div></div>
+ <div class="balance"><div class="small">YOUR GOLD BALANCE</div><div class="amount" id="gold">0</div><div class="unit">GOLD POINTS</div></div>
+ <div class="stats">
+  <div class="stat">⚡ Energy <b id="energy">500 / 500</b></div>
+  <div class="stat">🪙 Per tap <b id="power">+1 GOLD</b></div>
+ </div>
+ <div class="taparea">
+  <div class="tapcoin" id="tap" role="button" aria-label="Tap to earn">S<br>G</div>
+  <div class="taplabel">TAP THE GOLD COIN TO COLLECT</div>
+ </div>
+ <div class="energyrow"><span>⚡ ENERGY</span><span id="energytext">500 / 500</span></div>
+ <div class="bar"><div class="fill" id="energybar"></div></div>
+ <div class="section"><div class="sectitle">🚀 Boost your progress</div>
+  <div class="cards">
+   <div class="card"><div class="emoji">⬆️</div><h3>Tap Booster</h3><p>Increase gold earned per tap.</p><button class="btn" id="upgrade">Upgrade · 100</button></div>
+   <div class="card"><div class="emoji">🎁</div><h3>Daily Gift</h3><p>Collect your daily reward.</p><button class="btn" id="daily">Claim +250</button></div>
+   <div class="card"><div class="emoji">🎡</div><h3>Lucky Spin</h3><p>Try your luck once per day.</p><button class="btn" id="spin">Spin free</button></div>
+   <div class="card"><div class="emoji">🎯</div><h3>Tap Mission</h3><p>Reach 100 taps and earn a bonus.</p><button class="btn" id="mission">Check mission</button></div>
+  </div>
+ </div>
+ <div class="notice">⚠️ Demo version: GOLD points are stored only on this device. They are not cryptocurrency or cash and cannot be withdrawn. Real rewards require a secure server, verified accounts and payment integration.</div>
+</div>
+<div class="nav">
+ <button class="active" onclick="nav('earn',this)"><span>⛏️</span>Earn</button>
+ <button onclick="nav('boost',this)"><span>🚀</span>Boost</button>
+ <button onclick="nav('rank',this)"><span>🏆</span>Ranks</button>
+ <button onclick="nav('wallet',this)"><span>👛</span>Wallet</button>
+</div>
+<div class="modalback" id="modalback"><div class="modal"><button class="close" onclick="closeModal()">×</button><div id="modalcontent"></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const KEY='sk_gold_rush_demo_v1';
+let s={gold:0,energy:500,power:1,taps:0,lastEnergy:Date.now(),daily:'',spin:''};
+try{const old=JSON.parse(localStorage.getItem(KEY)||'null');if(old)s={...s,...old}}catch(e){}
+function save(){localStorage.setItem(KEY,JSON.stringify(s));render()}
+function render(){document.getElementById('gold').textContent=Math.floor(s.gold).toLocaleString();document.getElementById('energy').textContent=s.energy+' / 500';document.getElementById('energytext').textContent=s.energy+' / 500';document.getElementById('energybar').style.width=(s.energy/500*100)+'%';document.getElementById('power').textContent='+'+s.power+' GOLD';document.getElementById('upgrade').textContent='Upgrade · '+(100*s.power);document.getElementById('daily').disabled=s.daily===new Date().toDateString();document.getElementById('daily').textContent=s.daily===new Date().toDateString()?'Come back tomorrow':'Claim +250';document.getElementById('spin').disabled=s.spin===new Date().toDateString();document.getElementById('spin').textContent=s.spin===new Date().toDateString()?'Already spun':'Spin free'}
+function toast(t){let e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',1800)}
+document.getElementById('tap').addEventListener('click',()=>{if(s.energy<=0){toast('No energy. Wait for recharge!');return}s.gold+=s.power;s.energy--;s.taps++;save()});
+document.getElementById('upgrade').onclick=()=>{let cost=100*s.power;if(s.gold<cost){toast('Not enough GOLD points');return}s.gold-=cost;s.power++;save();toast('Tap power upgraded!')};
+document.getElementById('daily').onclick=()=>{if(s.daily===new Date().toDateString())return;s.gold+=250;s.daily=new Date().toDateString();save();toast('Daily gift collected!')};
+document.getElementById('spin').onclick=()=>{if(s.spin===new Date().toDateString())return;let prize=[50,100,150,250,500][Math.floor(Math.random()*5)];s.gold+=prize;s.spin=new Date().toDateString();save();toast('You won '+prize+' GOLD points!')};
+document.getElementById('mission').onclick=()=>{if(s.taps>=100){s.gold+=100;s.taps-=100;save();toast('Mission complete: +100!')}else toast('Your taps: '+s.taps+' / 100')};
+function recharge(){let now=Date.now(),add=Math.floor((now-s.lastEnergy)/60000);if(add>0&&s.energy<500){s.energy=Math.min(500,s.energy+add);s.lastEnergy=now;save()}}
+function nav(where,el){document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));el.classList.add('active');if(where==='boost')document.querySelector('.section').scrollIntoView({behavior:'smooth'});else if(where==='rank')show('🏆 Leaderboard','A real leaderboard needs online accounts and a secure server. This demo saves progress only on this device.');else if(where==='wallet')show('👛 My Wallet','Your balance is '+s.gold.toLocaleString()+' GOLD demo points. Withdrawals, crypto transfers and cash payments are not connected.');else window.scrollTo({top:0,behavior:'smooth'})}
+function show(title,msg){document.getElementById('modalcontent').innerHTML='<h2>'+title+'</h2><p>'+msg+'</p>';document.getElementById('modalback').style.display='flex'}
+function closeModal(){document.getElementById('modalback').style.display='none'}
+recharge();render();setInterval(recharge,15000);
+</script>
+</body>
+</html>
